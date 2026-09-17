@@ -14,7 +14,7 @@ Give your assistant access to this repository and paste:
 
 If your assistant cannot open repository links, download the repository using **Code → Download ZIP** and attach the Markdown files, or open the extracted folder in your coding assistant.
 
-Each new app idea gets its own project folder and GitHub repository. The assistant should create them as part of the work, then return both the repository URL and, for web apps, a verified live URL. Keep this repository as the reusable guide collection. Copy the guides into a project if helpful; do not put the app's code back into this template repository.
+Each new app idea gets its own project folder and GitHub repository. For this collection's owner, make new web-app repositories public and publish them with GitHub Pages by default so the app has a live link; preserve any explicit privacy requirement or sensitive data instead of publishing it. The assistant should create the repository and live site as part of the work, then return both verified URLs. Keep this repository as the reusable guide collection. Copy the guides into a project if helpful; do not put the app's code back into this template repository.
 
 ## Guide map
 

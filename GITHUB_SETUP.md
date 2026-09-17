@@ -47,7 +47,7 @@ An ignore rule does not remove files already tracked or erase earlier commits. I
 
 Use the repository the user requested for an existing app. For every new app idea, create a separate repository from this template in the user's intended GitHub account, with a descriptive name. Do this during the initial working version; creating only a local Git repository is insufficient. Confirm the owner and name from available context rather than asking for technical choices unnecessarily.
 
-Choose visibility for the intended delivery. GitHub Pages is a public website, including when its source repository is private. GitHub Free normally requires a public repository for Pages; paid plans may allow a private source repository, but the Pages site remains public. If the app is meant to be private, keep the repository private and use a suitable access-controlled preview instead of making it public silently. Never publish secrets, personal data, or private sample content.
+For this guide collection's owner, choose a public repository for a new web app by default so GitHub Pages can provide the requested live link. An explicit privacy request or sensitive content takes priority: keep that repository private and use an appropriate private preview rather than publishing it. GitHub Pages is a public website, including when its source repository is private. GitHub Free normally requires a public repository for Pages; paid plans may allow a private source repository, but the Pages site remains public. Never publish secrets, personal data, or private sample content.
 
 For a genuinely new local folder with no Git history:
 

@@ -4,7 +4,7 @@ Help a beginner turn an idea into a working app. Use plain English and take resp
 
 ## 1. Understand the outcome
 
-Use information already provided. The default outcome for each new idea is a separate GitHub repository and, for a web app, a live URL the user can open. Ask only for missing details that change the product:
+Use information already provided. The default outcome for each new idea is a separate GitHub repository and, for a web app, a live URL the user can open. The owner of this guide collection has explicitly asked for public GitHub repositories and live GitHub Pages sites for web ideas by default. Keep an app private when the user explicitly asks or its contents require it, and explain the hosting alternative. Ask only for missing details that change the product:
 
 - What should the app do, and who will use it?
 - Should it work in a browser, as an installed desktop program, or on a phone?
