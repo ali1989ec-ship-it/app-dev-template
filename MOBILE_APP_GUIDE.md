@@ -1,74 +1,68 @@
-# MOBILE_APP_GUIDE.md — Phone apps (Android / iPhone)
+# Mobile apps — Flutter
 
-Use **Flutter**. It builds one app that works on both Android and iPhone from a single codebase, and it's beginner-friendly.
+Follow [Start here](START_HERE.md) first. Flutter is the default for a new app that needs Android and iOS from a shared codebase. Keep an existing stack when appropriate.
 
-## What to install (walk them through this first)
+## Inspect and install only what is needed
 
-1. **Flutter SDK** — https://docs.flutter.dev/get-started/install
-   - Tell them to download it and follow the installer for their OS.
-2. **Android Studio** — needed for the Android emulator (a virtual phone on the computer) and Android build tools. Free download.
-3. **VS Code** (recommended editor) with the "Flutter" extension installed from the Extensions panel.
-4. Confirm it worked by running:
+Check the host OS, Flutter SDK, available devices, and platform build tools. Use the official installation guide for that operating system. Android work needs the Android SDK and a physical device or emulator; Android Studio can manage those tools. An editor is optional if the assistant can edit files directly.
 
-   ```sh
-   flutter doctor
-   ```
+```sh
+flutter doctor
+flutter devices
+```
 
-   Explain: this checks everything is installed correctly. Fix any red ❌ items it lists, one at a time, before moving on.
+Resolve issues relevant to the target platform. Do not block an Android-only task on missing tools for unrelated platforms. Some platform licenses or device approvals may need the user's action; explain the exact step.
 
-(iPhone builds require a Mac with Xcode — if they're on Windows, tell them plainly: they can build and test the Android version fully, but building for iPhone needs a Mac, or a cloud Mac service like Codemagic later.)
+iOS builds require macOS and Xcode, locally or on an authorized hosted build machine. Explain this early if the current computer cannot build the chosen target. Local development and App Store distribution have different account requirements; check current Apple documentation before requesting paid enrollment.
 
-## Creating the project
+## Create and run
+
+Use a new folder and a valid project name:
 
 ```sh
 flutter create my_app
 cd my_app
-```
-
-Explain: this creates a new folder with a working, empty app template.
-
-## Running it
-
-```sh
 flutter run
 ```
 
-Explain: this launches the app on a connected phone or the emulator. First run is slow; that's normal.
+Select a known available device if more than one is connected. Use `lib/main.dart` as the starting point, group screens and reusable widgets sensibly, and avoid excessive architecture for a small first version.
 
-## Where the code goes
+Use preference storage for small non-sensitive settings and a suitable local database for structured records. Use platform-backed secure storage for credentials where needed. Add a backend only for requirements such as shared data, accounts, or synchronization.
 
-- `lib/main.dart` — the starting point of the app. Nearly all their code changes will happen inside `lib/`.
-- Keep each screen in its own file inside `lib/screens/`.
-- Keep reusable pieces (buttons, cards) inside `lib/widgets/`.
+Treat client-side configuration as discoverable. Public Supabase keys can be used with properly configured access policies; secret/service-role keys must stay on a trusted backend. See [web app security guidance](WEB_APP_GUIDE.md#protect-data-at-the-backend).
 
-## Common beginner tasks — quick reference
+## Verify behavior
 
-| They want to... | Do this |
-| --- | --- |
-| Add a new screen | Create a new `.dart` file in `lib/screens/`, define a `StatelessWidget` or `StatefulWidget` class |
-| Save data on the phone | Use the `shared_preferences` package for simple data, or `sqflite` for a local database |
-| Call an online database | Use Supabase (see `DEPLOYMENT_GUIDE.md`) with the `supabase_flutter` package |
-| Add an icon/image | Put it in an `assets/` folder, register it in `pubspec.yaml` |
-| Add a new package/library | Run `flutter pub add <package_name>` |
+```sh
+flutter analyze
+flutter test
+```
 
-## Building the installable app file
+Replace template-only tests with meaningful checks for the actual app. Exercise the main journey on a target device or emulator, including restart persistence, keyboard behavior, small screens, and relevant network or permission failures. Test offline behavior if it is promised.
 
-- **Android (.apk, installable file):**
+If the app has accounts, test that users cannot access one another's private records. State explicitly when testing was limited to an emulator or one platform.
 
-  ```sh
-  flutter build apk --release
-  ```
+## Build for the intended distribution route
 
-  The file appears at `build/app/outputs/flutter-apk/app-release.apk`. This can be sent directly to an Android phone and installed (they may need to allow "install from unknown sources").
-- **Google Play Store (.aab):**
+For Android:
 
-  ```sh
-  flutter build appbundle --release
-  ```
+```sh
+flutter build apk --release
+flutter build appbundle --release
+```
 
-  Explain this is only needed if they want to publish on the Play Store, which requires a one-off $25 developer account.
-- **iPhone:** requires a Mac + Xcode + a $99/year Apple Developer account to publish to the App Store. Flag this clearly as the one part that costs money and needs Apple hardware.
+Choose the APK for direct device testing or distribution when appropriate, and the app bundle for a Play Store release. Configure and verify release signing before store submission; a successful release build alone does not establish that store signing is ready. Protect signing keys and passwords, and keep them out of Git.
 
-## When stuck
+The normal APK output is `build/app/outputs/flutter-apk/app-release.apk`; use the actual build output to locate artifacts because build options can change filenames.
 
-Most Flutter errors are shown clearly in the terminal under "Exception" or "Error:". Read the first red line back to the user in plain English before suggesting a fix.
+For iOS, follow Flutter's iOS release guide for identifiers, signing, provisioning, and archive creation on macOS. Use TestFlight or an appropriate authorized distribution route. Do not promise that an iOS build can simply be sent to any phone as an installable file.
+
+Store submission may require paid accounts, identity verification, testing, privacy disclosures, screenshots, and review. Check current requirements and fees rather than hard-coding prices. Ask the user only for decisions or actions that genuinely need them.
+
+Follow [deployment](DEPLOYMENT_GUIDE.md) and verify the actual release artifact.
+
+## Official references
+
+- [Flutter installation](https://docs.flutter.dev/get-started/install)
+- [Android release and signing](https://docs.flutter.dev/deployment/android)
+- [iOS release and signing](https://docs.flutter.dev/deployment/ios)

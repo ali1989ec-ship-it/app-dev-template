@@ -1,54 +1,78 @@
-# DEPLOYMENT_GUIDE.md — Getting the app in front of real people
+# Deployment — deliver and verify a usable result
 
-Which section to use depends on which guide they followed:
+Follow [Start here](START_HERE.md) and the chosen platform guide. A local preview, a hosted preview, and a public production release are different outcomes. Establish which the user needs and act within that authorization.
 
-## If they followed WEB_APP_GUIDE.md → Vercel + Supabase
+Prepare a working build first. Ask only for account access, cost, or release decisions that genuinely require user involvement; do not repeatedly reconfirm already authorized work.
 
-**Vercel (hosting the website):**
+## Before sharing
+
+Run the relevant checks and exercise the main journey. Review configuration, data access rules, and any sensitive sample data. Record the source revision, required environment-variable names, and a practical way to return to the previous working version. A code rollback does not automatically reverse database changes, so plan those separately.
+
+## Web apps
+
+Use existing hosting when available. Vercel is a default option for a new compatible web app, not a requirement to migrate an existing project.
+
+For a standard Vite app, build and inspect the production output first:
 
 ```sh
-npm install -g vercel
+npm run build
+npm run preview
+```
+
+Use an existing Vercel CLI or install it from the official source if needed. Authenticate only when necessary:
+
+```sh
 vercel login
 vercel
 ```
 
-- First run asks a few questions — accept the defaults by pressing Enter.
-- It prints a live URL immediately (e.g. `my-app-abc123.vercel.app`).
-- To push a new live version after changes: `vercel --prod`
-- Best long-term setup: go to https://vercel.com/new, sign in with GitHub, and import the repo — after that, every `git push` deploys automatically and no manual command is needed.
-
-**Supabase CLI (optional — only if managing the database from the terminal rather than the dashboard):**
+Inspect the selected account, project, framework, build command, and output directory. Do not accept defaults blindly or link to the wrong project. The normal Vite output is `dist`, unless configured otherwise. A normal `vercel` deployment creates a preview; production uses:
 
 ```sh
-npm install -g supabase
-supabase login
-supabase init
-supabase link --project-ref YOUR_PROJECT_REF
+vercel --prod
 ```
 
-- `YOUR_PROJECT_REF` is found in the Supabase dashboard URL for the project.
-- Most beginners can manage tables fine from the Supabase website dashboard and never need the CLI — only introduce this if they want to track database changes in Git alongside their code.
+Use that command when a production release is authorized. Alternatively, connect the intended GitHub repository and configure its production branch. Explain that pushes to that branch can publish changes automatically.
 
-**Environment variables on Vercel:** once the app uses Supabase keys, add them in the Vercel dashboard under **Project → Settings → Environment Variables** — this keeps them out of the public GitHub repo entirely.
+Set required configuration for the correct preview or production environment and redeploy when build-time values change. Values bundled into client code remain public even if entered in the hosting dashboard. Store privileged keys in backend-only configuration.
 
-## If they followed DESKTOP_APP_GUIDE.md → sharing the .exe/.dmg
+Open the actual deployed URL. Test the main journey, refresh on nested routes if applicable, persistence, sign-in callbacks, and relevant access rules. Record the working URL and any access restrictions. Check service limits and current pricing before enabling paid features.
 
-There's no "deploy" step — the built file itself is the deliverable.
+## Supabase database changes
+
+Use the dashboard for simple inspection and the CLI when versioned migrations or local development are useful. Do not install the Supabase CLI globally with npm. A supported project-local installation is:
 
 ```sh
-npm run make
+npm install --save-dev supabase
+npx supabase login
+npx supabase init
+npx supabase link --project-ref YOUR_PROJECT_REF
 ```
 
-- Find the installer in the `out/` folder.
-- Share it via GitHub Releases (`gh release create v1.0.0 out/**/*.exe`), a cloud drive link, or a file-sharing service — whichever is easiest for them.
-- Remind them: Windows will show an "unrecognised app" warning for unsigned installers. This is expected and does not mean something is broken.
+Replace the project reference with the intended project. Inspect existing configuration before initializing or linking. Check current Node and container-runtime requirements if local Supabase services are needed; do not add Docker merely to inspect a hosted database.
 
-## If they followed MOBILE_APP_GUIDE.md → sharing the app
+Store schema and policy changes in migration files. Review and test them against an appropriate development environment before applying them to production. Keep access policies and required configuration aligned with the deployed app. Verify migration results and protect existing data.
 
-- **Android, quick sharing:** send the `.apk` file directly (from `flutter build apk --release`) — the other person needs to allow "install from unknown sources" once.
-- **Android, proper store listing:** requires a one-off $25 Google Play Developer account, then upload the `.aab` file via the Play Console.
-- **iPhone:** requires a Mac + a $99/year Apple Developer account, and submission through App Store Connect. Flag this as the one path with real cost and Apple-only tooling — there's no shortcut around it.
+## Desktop apps
 
-## General rule
+Use the platform-specific makers described in [the desktop guide](DESKTOP_APP_GUIDE.md). Build and test the actual installer on its target OS and architecture. For public distribution, address signing, notarization where applicable, release notes, and updates.
 
-Get it working and shareable in the cheapest, simplest way first (a raw `.apk`, a Vercel preview link, an unsigned `.exe`). Only go through app stores or paid accounts once they're sure they want to distribute it properly.
+Publish only the intended tested artifacts to an authorized destination such as GitHub Releases. Prefer explicit file paths over broad globs that could upload unrelated output. Check release visibility and download access, then verify the downloadable file is the expected artifact.
+
+## Mobile apps
+
+Follow [the mobile guide](MOBILE_APP_GUIDE.md) for release signing and builds. Choose the appropriate route: Android device testing, Play testing tracks, iOS TestFlight, or a store release. A compiled file is not proof that installation, review, or publication succeeded.
+
+Check current developer-account, testing, privacy, and store-submission requirements. Prepare the package and listing before any final user action. Distinguish uploaded, processing, under review, available to testers, and publicly released states in progress reports.
+
+## Final handoff
+
+Provide the live URL or exact artifact, supported platforms, what was tested, and any remaining limitations. Update the project's README with repeatable run, test, and release instructions. Verify the remote source revision and the delivery itself; report partial completion honestly when a service or user action is still pending.
+
+## Official references
+
+- [Vercel CLI deploy](https://vercel.com/docs/cli/deploy)
+- [Vercel Git integration](https://vercel.com/docs/git)
+- [Supabase CLI setup](https://supabase.com/docs/guides/local-development/cli/getting-started)
+- [Supabase database migrations](https://supabase.com/docs/guides/deployment/database-migrations)
+- [GitHub CLI releases](https://cli.github.com/manual/gh_release_create)

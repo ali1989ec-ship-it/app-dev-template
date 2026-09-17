@@ -1,86 +1,91 @@
-# GITHUB_SETUP.md — Saving your project online with GitHub
+# GitHub — save and verify the work
 
-GitHub is where the project's code is backed up and its history is kept, so nothing is ever lost. Do this once at the start of every new project.
+Follow [Start here](START_HERE.md). Git records local history; GitHub stores the commits that have actually been uploaded. Unsaved files and local-only commits are not backed up to GitHub.
 
-## One-time setup (only needed the very first time)
+## Inspect existing state first
 
-1. Create a free account at https://github.com if they don't have one.
-2. Install **Git**: https://git-scm.com/downloads
-3. Confirm it worked:
-
-   ```sh
-   git --version
-   ```
-
-4. Set their name/email (used to label their changes):
-
-   ```sh
-   git config --global user.name "Their Name"
-   git config --global user.email "their@email.com"
-   ```
-
-5. Install **GitHub CLI** (`gh`) — lets you create repos from the terminal without opening a browser: https://cli.github.com
-6. Log in:
-
-   ```sh
-   gh auth login
-   ```
-
-   Follow the on-screen prompts (choose GitHub.com, HTTPS, log in via browser — it's the simplest option).
-
-## Creating the repository for a new project
-
-From inside the project folder (e.g. `my-app`):
+Check the working directory, existing project instructions, repository status, branch, remotes, and available authentication before changing anything. Do not initialize a second repository, replace a remote, or overwrite user changes blindly.
 
 ```sh
-git init
-gh repo create my-app --private --source=. --remote=origin
+git --version
+gh --version
+git status --short
+git remote -v
+gh auth status
 ```
 
-Explain:
+Run repository-specific checks only inside a repository. Install missing tools from official sources when needed. If Git is unavailable but GitHub CLI is authenticated, its API commands can still manage repository files; do not claim to have a local Git checkout in that case.
 
-- `git init` starts tracking changes in this folder.
-- `gh repo create` makes a new repository on their GitHub account and connects this folder to it. `--private` keeps it hidden from the public — change to `--public` if they want it visible to anyone.
+Prefer CLI or API operations for repeated changes. Browser and CLI authentication are separate. For CLI sign-in:
 
-## Before the first commit — protect secrets
+```sh
+gh auth login --hostname github.com --git-protocol https --web
+```
 
-If the project has any API keys or passwords (e.g. Supabase keys), create a file called `.gitignore` in the project root containing:
+If user action is needed, provide the current activation link and code with a short explanation. Do not reuse expired codes or ask for passwords or tokens in chat. Verify with `gh auth status` afterward.
+
+## Protect secrets before the first commit
+
+Preserve the framework's generated `.gitignore` and add relevant patterns, for example:
 
 ```gitignore
 .env
+.env.*
+!.env.example
 node_modules/
 build/
 dist/
+out/
+.DS_Store
 ```
 
-This stops those files from ever being uploaded to GitHub.
+Add framework-specific generated directories and any signing-key or credential files. Keep dependency lockfiles. Commit `.env.example` with placeholder values and documentation, never real secret credentials.
 
-## Saving changes (do this often — after every working change)
+An ignore rule does not remove files already tracked or erase earlier commits. If a real secret has been published, revoke or rotate it first and assess history cleanup separately. Public client keys are different from secret backend keys; see [the web guide](WEB_APP_GUIDE.md#protect-data-at-the-backend).
+
+## Create or connect a repository
+
+Use the repository the user requested. For a new app, create a separate repository from this template and choose private visibility unless the user asked otherwise. Confirm the owner and name from the available context.
+
+For a genuinely new local folder with no Git history:
 
 ```sh
-git add .
-git commit -m "Describe what changed, e.g. added login screen"
-git push
+git init -b main
 ```
 
-Explain each step in one line:
+Inspect Git's author settings. Use an established identity or ask for the preferred one; do not invent an email address. Prefer repository-local configuration over changing global settings unnecessarily.
 
-- `git add .` — selects all changed files to save.
-- `git commit -m "..."` — saves a labelled snapshot.
-- `git push` — uploads it to GitHub.
-
-## Cloning the project onto another computer (e.g. your PC)
+Review the files, stage the intended paths, and make an initial commit. The following example assumes the only initial file is `README.md`; adapt the file list to the real project:
 
 ```sh
-git clone https://github.com/USERNAME/my-app.git
-cd my-app
-npm install
+git add -- README.md
+git diff --cached
+git commit -m "Initialize project"
 ```
 
-Explain: this downloads a full copy of the project, ready to run.
+For a new GitHub repository, replace `OWNER/REPO` with the agreed destination:
 
-## Simple rules to follow
+```sh
+gh repo create OWNER/REPO --private --source=. --remote=origin --push
+```
 
-1. Commit and push after every change that works — small, frequent commits, not one giant commit at the end.
-2. Never commit `.env` files, passwords, or API keys.
-3. If `git push` is rejected, it usually means the GitHub copy has changes the local copy doesn't — run `git pull` first, then `git push` again.
+For an existing repository, inspect its history before connecting or pushing. Prefer cloning a nonempty repository into a separate folder and applying the intended changes there. For an empty destination connected as `origin`, the first push is normally `git push -u origin main`; confirm the branch name first.
+
+## Save meaningful milestones
+
+Review the diff and stage only the intended work. Avoid blindly staging unrelated changes or generated files. Run relevant checks, commit a coherent milestone, then push when GitHub backup is authorized.
+
+If a push is rejected, fetch and inspect the remote changes. Integrate them deliberately and resolve conflicts without discarding work. Do not force-push or run a blind pull as a universal fix. Be aware that a push may trigger an existing deployment workflow.
+
+Verify the remote branch contains the intended commit before reporting success. If using the Contents API, supply the current file SHA when updating an existing file. For a multi-file revision, prefer one Git tree and commit so the changes arrive together, and update the branch without force. If the branch advanced meanwhile, inspect and rebuild against the new head.
+
+## Continue on another computer
+
+Clone the actual repository, read its README, and restore dependencies using its tools: for example, `npm ci` for an npm project with a lockfile, or `flutter pub get` for Flutter. Restore required configuration securely. Do not assume every project uses npm.
+
+## Official references
+
+- [Git downloads](https://git-scm.com/downloads)
+- [GitHub CLI](https://cli.github.com/)
+- [CLI authentication](https://cli.github.com/manual/gh_auth_login)
+- [Creating repositories](https://cli.github.com/manual/gh_repo_create)

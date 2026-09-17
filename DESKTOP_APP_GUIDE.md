@@ -1,69 +1,57 @@
-# DESKTOP_APP_GUIDE.md — Windows/Mac programs (Electron)
+# Desktop apps — Electron and Electron Forge
 
-Use **Electron** with **Electron Forge** (not Electron Builder — Forge has an easier, more beginner-friendly setup with fewer config files).
+Follow [Start here](START_HERE.md) first. Use an installed desktop app when desktop integration, file access, or the user's preference justifies it. Keep an existing project's stack.
 
-## What to install first
+## Set up the project
 
-1. **Node.js** (LTS version) — https://nodejs.org — this installs both Node and `npm`, the tool used to install code libraries.
-2. Confirm it worked:
-
-   ```sh
-   node -v
-   npm -v
-   ```
-
-   Both should print a version number.
-3. **VS Code** as the editor.
-
-## Creating the project
+For a new Electron app, Electron Forge provides a starting point and packaging tools. Check the OS, Node.js, package manager, and current Forge requirements first. In a new directory:
 
 ```sh
 npm init electron-app@latest my-app -- --template=vite
-```
-
-Explain: this creates a working Electron app template using Vite (a fast tool for building the interface), so they get hot-reload (changes show up instantly) out of the box.
-
-```sh
 cd my-app
 npm start
 ```
 
-This opens the app as a real desktop window.
+Replace `my-app` with the project name. Inspect the generated configuration and entry points; template layouts can change. Verify that the application window opens before building more features.
 
-## Where the code goes
+## Keep responsibilities clear
 
-- `src/` — the interface (HTML/CSS/JavaScript or a framework like React if added later). This is the part that looks like a webpage inside the app window.
-- `src/main.js` (sometimes `index.js`) — controls the app window itself: size, menu bar, file access, etc. Changes here need the app restarted.
-- Treat it like a website that happens to open in its own window — anything they know from HTML/CSS/JS applies directly.
+- The **main process** manages windows and privileged desktop operations.
+- The **renderer** draws the interface and handles user interaction.
+- A **preload bridge** exposes specific, limited operations between them.
 
-## Common beginner tasks — quick reference
+Keep context isolation enabled and Node integration disabled in the renderer. Retain sandboxing where supported. Do not expose unrestricted filesystem access or generic command execution through the bridge. Validate IPC requests, their sender, and inputs in the main process. Restrict navigation and external links to appropriate destinations.
 
-| They want to... | Do this |
-| --- | --- |
-| Save data between sessions | Use `electron-store` package (simple key-value storage on disk) |
-| Access files on their computer | Use Electron's `dialog` and `fs` modules in `main.js`, not in the interface code |
-| Add a menu bar item | Edit the `Menu` template in `main.js` |
-| Add a new package | `npm install <package_name>` |
-| Use a UI framework (React etc.) | Fine to add, but keep it optional — plain HTML/CSS/JS is enough for a first app |
+Use native dialogs for file selection. Keep file operations in the privileged process and handle cancellation, missing files, and permission failures clearly. Store ordinary settings under the app's user-data location, not inside its installation directory. Use appropriate OS-backed credential storage for tokens rather than treating a settings file as a secret vault.
 
-## Building the installable .exe / .dmg
+Do not ship backend secrets in the executable. Packaged application code can be inspected.
+
+## Verify the app and its package
+
+Test the main journey, keyboard use, resizing, saved state after restart, and relevant file-operation failures. Check both main-process logs and renderer errors. Run meaningful automated checks supported by the project.
+
+For a Forge project, inspect the configured makers, then run:
 
 ```sh
 npm run make
 ```
 
-Explain: this produces the installable program. Output appears in the `out/` folder:
+A **maker** determines the output format. An `.exe`, `.dmg`, `.zip`, `.deb`, or `.rpm` is only produced when the corresponding maker and its prerequisites are configured. A macOS build does not automatically create a Windows installer. Use suitable machines or CI runners for each target OS and architecture.
 
-- Windows → a `.exe` installer (Squirrel) or a portable `.exe`
-- Mac → a `.dmg`
-- Linux → a `.deb` or `.rpm`
+Find the actual artifacts under `out/` and test installation, launch, persistence, and uninstallation on the target platform. Report any target you could not test.
 
-This is the file they send to someone else to install the app — no coding tools needed on the other end.
+## Distribution
 
-### Note on code signing
+Development builds and public releases have different requirements. For public distribution, plan platform-appropriate signing, macOS notarization, and an update strategy. Check current vendor requirements and costs before purchasing anything.
 
-Unsigned Windows `.exe` files trigger a "Windows protected your PC" warning on first run — this is normal and not a bug. Mention it so they aren't alarmed. Code signing certificates cost money and are only worth it for wide public distribution.
+An unsigned-app warning is a distribution limitation, not proof that a file is safe. Do not instruct users to disable OS security protections as a routine fix.
 
-## When stuck
+Follow [deployment](DEPLOYMENT_GUIDE.md) to publish an authorized release with the exact tested installer and clear platform requirements.
 
-Electron errors show in two places: the terminal (main process errors) and the app's own DevTools console (interface errors — open with `Ctrl+Shift+I` on Windows/Linux, `Cmd+Option+I` on Mac). Check both before diagnosing.
+## Official references
+
+- [Electron Forge](https://www.electronforge.io/)
+- [Forge makers](https://www.electronforge.io/config/makers)
+- [Forge build lifecycle](https://www.electronforge.io/core-concepts/build-lifecycle)
+- [Electron security](https://www.electronjs.org/docs/latest/tutorial/security)
+- [Electron context isolation](https://www.electronjs.org/docs/latest/tutorial/context-isolation)

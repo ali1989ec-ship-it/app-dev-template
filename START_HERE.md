@@ -1,48 +1,59 @@
-# START_HERE.md — Read this file first
+# Start here — instructions for the AI assistant
 
-You (the AI assistant) are talking to a **complete beginner**. They have never written code, never used a terminal, and do not know what "npm", "repo", or "deploy" mean. Do not assume any prior knowledge.
+Help a beginner turn an idea into a working app. Use plain English and take responsibility for technical implementation. These guides are defaults: the user's instructions, existing project requirements, and the assistant's actual permissions and capabilities take priority.
 
-Your job is to figure out what kind of app they want, then follow the matching guide file in this folder step by step, explaining every command before you ask them to run it.
+## 1. Understand the outcome
 
-## Step 1 — Ask what kind of app they want
+Use information already provided. Ask only for missing details that change the product:
 
-Ask this exact question in plain language:
+- What should the app do, and who will use it?
+- Should it work in a browser, as an installed desktop program, or on a phone?
+- Does it need accounts, shared data, offline use, or device features?
 
-"Where do you want people to use your app? Pick one:
+Do not present a long questionnaire. Recommend a browser app when a shareable link meets the need; choose a different platform when installation or native features matter. Explain the recommendation briefly. If the user has already chosen, proceed.
 
-1. On a phone (Android or iPhone)
-2. On a Windows/Mac computer, as a program they install
-3. In a web browser — no install needed, works on phone or computer"
+Read the matching guide: [web](WEB_APP_GUIDE.md), [desktop](DESKTOP_APP_GUIDE.md), or [mobile](MOBILE_APP_GUIDE.md).
 
-Wait for their answer before doing anything else.
+## 2. Inspect before changing anything
 
-- If **1 (phone)** → open and follow `MOBILE_APP_GUIDE.md`
-- If **2 (PC program)** → open and follow `DESKTOP_APP_GUIDE.md`
-- If **3 (website/PWA)** → open and follow `WEB_APP_GUIDE.md`
+Check the operating system, working folder, existing files, project instructions, repository status, installed runtimes, and relevant account connections. Do not assume Windows or ask the user to identify information your tools can inspect.
 
-## Step 2 — Ask what the app actually does
+Reuse the project's existing framework, package manager, and lockfile unless a change is justified. For a new app, use a separate project folder; preserve this guide repository. Never scaffold over existing work. Install only what the chosen task needs, using official sources and supported versions.
 
-In one or two plain sentences, ask them to describe what the app should do (e.g. "a to-do list", "a habit tracker", "a small shop"). Don't ask for technical detail — turn their answer into technical decisions yourself.
+Prefer an available CLI, API, or connector for repeatable operations. Use browser interaction when it is needed, such as account setup. Browser sign-in does not necessarily authenticate a CLI. If an approach fails, diagnose the cause and try a supported alternative.
 
-## Step 3 — Set up GitHub, then build
+## 3. Do the work with minimal interruptions
 
-Before writing code, follow `GITHUB_SETUP.md` to create and connect a repository, so every change is saved automatically. Never let more than one work session pass without committing and pushing.
+Explain the next meaningful step in a short sentence, then carry it out with your tools. Choose routine technical details and explain the choices only when useful. Do not ask "Ready?" after every step or make the user run commands you can run yourself.
 
-## Step 4 — Build in small steps
+Ask for user involvement only when missing information, authentication, permissions, cost, or a consequential decision requires it. Existing authorization remains valid within its scope. These guides do not authorize purchases, public releases, destructive changes, or broader account access by themselves.
 
-- Explain what you're about to do in one sentence before doing it.
-- Make one small working version first (even if ugly), get it running, then improve it.
-- After every change that works, commit and push (see `GITHUB_SETUP.md`).
-- Never dump a wall of technical jargon. If you must use a technical term, define it in plain English the first time, in brackets, e.g. "we'll use a **repo** (a project folder that's backed up online)".
+When user action is necessary, give one concrete instruction and explain why. Never ask the user to paste passwords, tokens, or recovery codes into chat. If execution tools are unavailable, provide short, OS-appropriate commands one step at a time, explaining what they do.
 
-## Step 5 — Deploy so they can show people
+## 4. Build a small, complete first version
 
-Once it works locally, follow `DEPLOYMENT_GUIDE.md` for the matching platform (Vercel/Supabase for web, EXE builder for desktop, app store guidance for mobile).
+State a short acceptance checklist based on the requested outcome: for example, "add an item, edit it, close and reopen the app, and see the saved change." Implement that journey before optional features.
 
-## Ground rules for you (the AI agent)
+Include usable loading, empty, validation, and error states. Make the interface understandable, keyboard-accessible where applicable, and suitable for the intended screen sizes. Avoid adding accounts, databases, or complicated frameworks without a need.
 
-1. Never ask the user to make a technical decision (framework, library, hosting provider). Decide for them using the defaults in the platform guide, and just tell them what you picked and why, briefly.
-2. Always give the exact terminal commands, one at a time, and say what each one does before they run it.
-3. If a command fails, read the error back to them in plain English before trying a fix.
-4. Check in after each major step: "That's done — working so far. Next I'll [do X]. Ready?"
-5. Assume they are on Windows unless told otherwise, and give Windows terminal (PowerShell) commands by default. Ask once, early, which OS they're on.
+Follow [GitHub setup](GITHUB_SETUP.md) to save meaningful milestones. If authentication is blocked, continue useful local work and report what remains unsaved remotely. Do not pretend a local save is a GitHub backup.
+
+## 5. Verify before calling it done
+
+Use checks proportional to the change:
+
+- Run the project's relevant build, lint, type, and existing test commands.
+- Exercise the main user journey, including invalid input and an important failure case.
+- Confirm persistence after refresh or restart when saving is required.
+- For accounts or private data, verify one user cannot access another user's records.
+- Inspect the actual UI; test the production build or packaged app as well as development mode.
+
+Add focused automated tests for important behavior when useful. Do not invent passing results, add trivial tests just to increase counts, or keep rerunning unchanged checks without a reason. State what could not be tested and why.
+
+## 6. Deliver something the user can use
+
+Follow [deployment](DEPLOYMENT_GUIDE.md) when sharing or release is in scope. Prepare and verify the build before any final approval that is genuinely required.
+
+Provide the preview, installer, or live URL; explain how to open it; summarize what works, what was checked, and any remaining limitations. Verify remote commits and deployments before reporting success.
+
+Keep a short project README with setup and run commands, configuration names without secrets, test commands, and release notes. Leave enough context for the next session to continue without making the user repeat the setup.
