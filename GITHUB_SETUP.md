@@ -45,7 +45,9 @@ An ignore rule does not remove files already tracked or erase earlier commits. I
 
 ## Create or connect a repository
 
-Use the repository the user requested. For a new app, create a separate repository from this template and choose private visibility unless the user asked otherwise. Confirm the owner and name from the available context.
+Use the repository the user requested for an existing app. For every new app idea, create a separate repository from this template in the user's intended GitHub account, with a descriptive name. Do this during the initial working version; creating only a local Git repository is insufficient. Confirm the owner and name from available context rather than asking for technical choices unnecessarily.
+
+Choose visibility for the intended delivery. GitHub Pages is a public website, including when its source repository is private. GitHub Free normally requires a public repository for Pages; paid plans may allow a private source repository, but the Pages site remains public. If the app is meant to be private, keep the repository private and use a suitable access-controlled preview instead of making it public silently. Never publish secrets, personal data, or private sample content.
 
 For a genuinely new local folder with no Git history:
 
@@ -63,13 +65,13 @@ git diff --cached
 git commit -m "Initialize project"
 ```
 
-For a new GitHub repository, replace `OWNER/REPO` with the agreed destination:
+For a new public repository intended for a GitHub Pages demo, replace `OWNER/REPO` with the app's actual destination:
 
 ```sh
-gh repo create OWNER/REPO --private --source=. --remote=origin --push
+gh repo create OWNER/REPO --public --source=. --remote=origin --push
 ```
 
-For an existing repository, inspect its history before connecting or pushing. Prefer cloning a nonempty repository into a separate folder and applying the intended changes there. For an empty destination connected as `origin`, the first push is normally `git push -u origin main`; confirm the branch name first.
+Use `--private` when private source is required; choose a hosting route compatible with that privacy requirement. For an existing repository, inspect its history before connecting or pushing. Prefer cloning a nonempty repository into a separate folder and applying the intended changes there. For an empty destination connected as `origin`, the first push is normally `git push -u origin main`; confirm the branch name first.
 
 ## Save meaningful milestones
 
@@ -77,7 +79,7 @@ Review the diff and stage only the intended work. Avoid blindly staging unrelate
 
 If a push is rejected, fetch and inspect the remote changes. Integrate them deliberately and resolve conflicts without discarding work. Do not force-push or run a blind pull as a universal fix. Be aware that a push may trigger an existing deployment workflow.
 
-Verify the remote branch contains the intended commit before reporting success. If using the Contents API, supply the current file SHA when updating an existing file. For a multi-file revision, prefer one Git tree and commit so the changes arrive together, and update the branch without force. If the branch advanced meanwhile, inspect and rebuild against the new head.
+Verify the remote branch contains the intended commit and return the repository URL before reporting success. If using the Contents API, supply the current file SHA when updating an existing file. For a multi-file revision, prefer one Git tree and commit so the changes arrive together, and update the branch without force. If the branch advanced meanwhile, inspect and rebuild against the new head.
 
 ## Continue on another computer
 

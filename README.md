@@ -10,11 +10,11 @@ These guides tell the assistant how to inspect your computer, choose suitable to
 
 Give your assistant access to this repository and paste:
 
-> Read START_HERE.md and the relevant guides in this repository. I want to build [describe your idea] for [web, desktop, or phone — or help me choose]. Inspect the available tools and existing files first. Handle the technical work you can perform yourself, explain progress in plain English, and ask me only for missing product decisions, sign-ins, or actions that need my involvement. Build and verify a small working version first.
+> Read START_HERE.md and the relevant guides in this repository. I want to build [describe your idea] for [web, desktop, or phone — or help me choose]. Inspect the available tools and existing files first. Create a separate GitHub repository for this app idea, commit and push its source, and give me its repository link. For a web app, put a working version online and give me the live link; use GitHub Pages for a static app when it fits. Handle the technical work you can perform yourself, explain progress in plain English, and ask me only for missing product decisions, sign-ins, or actions that need my involvement. Build and verify a small working version first.
 
 If your assistant cannot open repository links, download the repository using **Code → Download ZIP** and attach the Markdown files, or open the extracted folder in your coding assistant.
 
-For each new app, ask the assistant to create a separate project folder and repository. Keep this repository as the reusable guide collection. Copy the guides into that project if helpful; do not accidentally put the app's code back into this template repository.
+Each new app idea gets its own project folder and GitHub repository. The assistant should create them as part of the work, then return both the repository URL and, for web apps, a verified live URL. Keep this repository as the reusable guide collection. Copy the guides into a project if helpful; do not put the app's code back into this template repository.
 
 ## Guide map
 
@@ -31,9 +31,9 @@ For each new app, ask the assistant to create a separate project folder and repo
 
 The assistant should do routine setup, editing, debugging, and checks when its tools allow. You provide the idea and feedback, and complete account sign-ins when needed. You should not have to choose libraries or copy a long list of commands.
 
-The default starting points are Vite for web apps, Electron Forge for desktop apps, and Flutter for mobile apps. Supabase is optional for shared online data; Vercel is one web hosting option. Existing project choices and your preferences take priority.
+The default starting points are Vite for web apps, Electron Forge for desktop apps, and Flutter for mobile apps. Supabase is optional for shared online data. GitHub Pages hosts static web apps; Vercel is one option for apps that need a server. Existing project choices and your preferences take priority.
 
-A useful first delivery includes a working main user journey, evidence of testing, a preview or build you can open, clear limitations, and saved source files. A live deployment or GitHub upload is only complete once it has been verified.
+A useful first delivery includes a working main user journey, evidence of testing, a repository link, a live web link or installable build you can open, clear limitations, and saved source files. A live deployment or GitHub upload is only complete once it has been verified. GitHub Pages works for static browser apps; apps that need a server require another host for that server.
 
 ## Scope and maintenance
 

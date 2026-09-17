@@ -70,7 +70,7 @@ Inspect `package.json` first; existing projects may use different scripts. Test 
 
 Add a PWA only if installability or offline behavior is requested. It needs a manifest, suitable icons, HTTPS in deployment, and deliberate cache/update behavior. Test the intended offline journey and confirm new versions reach users; a plugin alone does not prove either works.
 
-Deploy using [the deployment guide](DEPLOYMENT_GUIDE.md), then repeat a short check against the live URL.
+Create and push this app's separate GitHub repository using [GitHub setup](GITHUB_SETUP.md). Deploy using [the deployment guide](DEPLOYMENT_GUIDE.md): make GitHub Pages the first choice for a static app, configure Vite's repository path correctly, and add an automatic deployment workflow. If the app needs server code, host that part elsewhere and explain how it connects to the public site. Repeat a short check against the live URL. Return both the GitHub repository link and the working web link.
 
 ## Official references
 
