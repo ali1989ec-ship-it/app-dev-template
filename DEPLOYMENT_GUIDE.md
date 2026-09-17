@@ -62,6 +62,7 @@ npm run preview
    ```
 
    Change the branch, commands, output folder, and action versions to match the actual project and current official guidance. Set required public build variables in the workflow or repository settings; never put server secrets into the static bundle.
+   If the web app lives in a subfolder such as `app/`, the example above will fail as written. Add `defaults: { run: { working-directory: app } }` under the job, set `actions/setup-node`'s `cache-dependency-path` to `app/package-lock.json`, and set the upload artifact `path` to `app/dist`. The workflow file still belongs at the repository root under `.github/workflows/`. Check the actual package and output paths before pushing.
 5. Push the workflow, inspect the Actions run, and resolve any failure. Open the Pages URL and test the real app, including assets, navigation, refresh, saving, and sign-in if applicable. Record the verified URL in the app's README and return it with the repository URL. Future pushes to the configured branch should redeploy; verify that at least the first deployment succeeds.
 
 For a plain HTML/CSS/JavaScript app with no build, use a Pages source or workflow suited to those static files. Do not add Vite just to publish it.
@@ -116,7 +117,7 @@ Check current developer-account, testing, privacy, and store-submission requirem
 
 ## Final handoff
 
-Provide the separate app repository URL and the live web URL or exact native artifact, supported platforms, what was tested, and any remaining limitations. Update the project's README with repeatable run, test, and release instructions. Verify the remote source revision and the delivery itself; report partial completion honestly when a service or user action is still pending.
+Provide the separate app repository URL and the live web URL or exact native artifact, supported platforms, what was tested, and any remaining limitations. Update the project's README with repeatable run, test, and release instructions. Verify that the remote branch contains the final source commit, that the deployment workflow succeeded, and that the live URL opens and completes the main journey. A localhost link, an Actions run that has only started, or a predicted Pages URL is not a verified delivery. If publishing is blocked, state the exact blocker and report partial completion honestly rather than calling the app done.
 
 ## Official references
 

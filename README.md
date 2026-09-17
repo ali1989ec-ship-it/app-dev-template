@@ -33,7 +33,7 @@ The assistant should do routine setup, editing, debugging, and checks when its t
 
 The default starting points are Vite for web apps, Electron Forge for desktop apps, and Flutter for mobile apps. Supabase is optional for shared online data. GitHub Pages hosts static web apps; Vercel is one option for apps that need a server. Existing project choices and your preferences take priority.
 
-A useful first delivery includes a working main user journey, evidence of testing, a repository link, a live web link or installable build you can open, clear limitations, and saved source files. A live deployment or GitHub upload is only complete once it has been verified. GitHub Pages works for static browser apps; apps that need a server require another host for that server.
+A useful first delivery includes a working main user journey, evidence of testing, a repository link, a live web link or installable build you can open, clear limitations, and saved source files. A live deployment or GitHub upload is only complete once it has been verified. GitHub Pages works for static browser apps; apps that need a server require another host for that server. For each web idea, ask for both links in the final handoff; if one cannot be provided, the assistant should explain the blocker and say the delivery is incomplete.
 
 ## Scope and maintenance
 

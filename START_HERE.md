@@ -54,6 +54,6 @@ Add focused automated tests for important behavior when useful. Do not invent pa
 
 For a web app, a shareable live version is in scope by default. Follow [deployment](DEPLOYMENT_GUIDE.md) to publish it: prefer GitHub Pages for a static app, and use suitable backend hosting when the app needs a server. A desktop or mobile app needs a tested runnable build or installer; a web page alone does not make its native features work. Prepare and verify the build before any final approval that is genuinely required.
 
-Provide the separate app repository URL and the live web URL or tested native build. Explain how to open it; summarize what works, what was checked, and any remaining limitations. Verify the remote commit and open the live deployment before reporting success. If the user asked for a live app, local-only success is an incomplete result.
+Provide the separate app repository URL and the live web URL or tested native build. Explain how to open it; summarize what works, what was checked, and any remaining limitations. Verify the remote commit and open the live deployment before reporting success. Treat the repository link and, for a web app, the working live link as completion checks for each idea. If either is missing, report the exact blocker and that the delivery is incomplete; a local preview is not a live link.
 
 Keep a short project README with setup and run commands, configuration names without secrets, test commands, and release notes. Leave enough context for the next session to continue without making the user repeat the setup.
