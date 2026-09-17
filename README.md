@@ -1,5 +1,7 @@
 # AI App Starter Kit
 
+Always make a new github repo for each project idea i have.
+
 Turn an app idea into a working project with an AI assistant, without needing to know the technical setup first.
 
 These guides tell the assistant how to inspect your computer, choose suitable tools, build a small first version, test it, save the work, and help you share it. This repository contains instructions, not a runnable app or preinstalled development tools.
